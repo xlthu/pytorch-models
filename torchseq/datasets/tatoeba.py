@@ -202,6 +202,30 @@ class Tatoeba(data.Dataset):
 
             print("Total lines {0}: Train {1} Val {2} Test {3}".format(len(lines), n_train, n_val, n_test))
 
+    def engStartTokenID(self):
+        return self.vocab_eng.getTokenId(self.start_token)
+
+    def langStartTokenID(self):
+        return self.vocab_lang.getTokenId(self.start_token)
+
+    def engEndTokenID(self):
+        return self.vocab_eng.getTokenId(self.end_token)
+
+    def langEndTokenID(self):
+        return self.vocab_lang.getTokenId(self.end_token)
+
+    def langToId(self, source):
+        return [self.vocab_lang.getTokenId(token, default=self.unk_token) for token in self.processSentence(source)]
+
+    def engToId(self, source):
+        return [self.vocab_eng.getTokenId(token, default=self.unk_token) for token in self.processSentence(source)]
+
+    def idToEng(self, ids):
+        return [self.vocab_eng.tokens[i] for i in ids]
+
+    def idToLang(self, ids):
+        return [self.vocab_lang.tokens[i] for i in ids]
+
     def __getitem__(self, index):
         data = [self.vocab_lang.getTokenId(token, default=self.unk_token) for token in self.data[index][0]]
         target = [self.vocab_eng.getTokenId(token, default=self.unk_token) for token in self.data[index][1]]

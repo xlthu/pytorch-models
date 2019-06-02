@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/examples/blob/master/imagenet/main.py
+"""
 import argparse
 import os
 import shutil

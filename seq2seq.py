@@ -15,7 +15,7 @@ class Encoder(nn.Module):
                             num_layers=n_layers, bidirectional=True)
         
     def initializeWeights(self):
-        nn.init.uniform_(self.embed.weight, -0.05, 0.05)
+        nn.init.uniform_(self.embed.weight, -0.1, 0.1)
 
         for name, w in self.encoder.named_parameters():
             if name.startswith("weight"):
@@ -60,14 +60,14 @@ class Attention(nn.Module):
 
     def initializeWeights(self):
         if self.score_method == "general":
-            nn.init.normal_(self.atten.weight, 0, 0.01)
+            nn.init.normal_(self.atten.weight, 0, 0.1)
             nn.init.constant_(self.atten.bias, 0)
         
         elif self.score_method == "concat":
-            nn.init.normal_(self.atten.weight[0], 0, 0.01)
+            nn.init.normal_(self.atten.weight[0], 0, 0.1)
             nn.init.constant_(self.atten.bias[0], 0)
 
-            nn.init.normal_(self.v, 0, 0.01)
+            nn.init.normal_(self.v, 0, 0.1)
 
     def forward(self, target_h, source_hs, source_mask):
         # target_h: N, target_dim
@@ -128,7 +128,7 @@ class Decoder(nn.Module):
         self.atten = Attention(source_dim, hidden_dim, score_method=atten_method)
 
     def initializeWeights(self):
-        nn.init.uniform_(self.embed.weight, -0.05, 0.05)
+        nn.init.uniform_(self.embed.weight, -0.1, 0.1)
 
         for name, w in self.decoder.named_parameters():
             if name.startswith("weight"):
@@ -136,7 +136,7 @@ class Decoder(nn.Module):
             elif name.startswith("bias"):
                 nn.init.constant_(w, 0)
 
-        nn.init.normal_(self.classifier.weight, 0, 0.01)
+        nn.init.normal_(self.classifier.weight, 0, 0.1)
         nn.init.constant_(self.classifier.bias, 0)
 
         self.atten.initializeWeights()
@@ -181,7 +181,7 @@ class Seq2seq(nn.Module):
         self.encoder.initializeWeights()
         self.decoder.initializeWeights()
 
-        nn.init.normal_(self.hiddenTransformer.weight, 0, 0.01)
+        nn.init.normal_(self.hiddenTransformer.weight, 0, 0.1)
         nn.init.constant_(self.hiddenTransformer.bias, 0)
 
     def flatten_parameters(self):
